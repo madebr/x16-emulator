@@ -10,11 +10,18 @@ matrix:
           packages:
             - libsdl2-dev
       compiler: gcc
-      script: make
+      script:
+        - mkdir build && cd build
+        - cmake .. -DWITH_YM2151=ON
+        - make
     - os: osx
       osx_image: xcode11
       addons:
         homebrew:
           packages:
+            - cmake
             - sdl2 
-      script: make 
+      script:
+        - mkdir build && cd build
+        - cmake .. -DWITH_YM2151=ON
+        - make
