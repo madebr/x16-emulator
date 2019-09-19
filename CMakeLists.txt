@@ -21,6 +21,10 @@ set(CMAKE_C_EXTENSIONS OFF)
 
 if(CMAKE_C_COMPILER_ID STREQUAL "GNU" OR CMAKE_C_COMPILER_ID STREQUAL "Clang" OR CMAKE_C_COMPILER_ID STREQUAL "AppleClang")
 	add_compile_options(-O3 -Wall -Werror)
+	if(WIN32)
+		# CMake 3.13 added add_link_options
+		set(CMAKE_EXE_LINKER_FLAGS "-Wl,--subsystem,console")
+	endif()
 endif()
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake")
