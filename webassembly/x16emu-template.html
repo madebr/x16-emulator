@@ -10,7 +10,7 @@
 
 <body>
     <H1 style="text-align:'center'">COMMANDER X16 EMULATOR</H1>
-    </br>
+    <br/>
     <figure style="overflow:visible;" id="spinner">
         <div class="spinner"></div>
         <center style="margin-top:0.5em"><strong>emscripten</strong></center>
@@ -34,10 +34,10 @@
     <hr/> -->
     <button type="button" onclick="getClipboard()">Paste Clipboard To Emulator</button>
     <button type="button" onclick="resetEmulator()">Reset Emulator</button>
-    <br>
+    <br/>
     <div>Console output:</div>
     <textarea class="emscripten" id="output" rows="8"></textarea>
-    <hr>
+    <hr/>
     <p style="padding-bottom: 0pt; padding-top: 0pt; "></p><a title="https://www.facebook.com/groups/CommanderX16/?ref=bookmarks" href="https://www.facebook.com/groups/CommanderX16/?ref=bookmarks">FB GROUP</a> | <a title="https://murray2.com/forums/commander-x16.9/" href="https://murray2.com/forums/commander-x16.9/">FORUM</a>    | <a title="https://www.facebook.com/groups/CommanderX16/permalink/402529400498160/" href="https://www.facebook.com/groups/CommanderX16/permalink/402529400498160/">FAQ</a> | <a title="https://github.com/commanderx16/x16-emulator/releases" href="https://github.com/commanderx16/x16-emulator/releases">EMULATOR</a></p>
 
     <script type='text/javascript'>
@@ -70,7 +70,7 @@
                     //text = text.replace(/&/g, "&amp;");
                     //text = text.replace(/</g, "&lt;");
                     //text = text.replace(/>/g, "&gt;");
-                    //text = text.replace('\n', '<br>', 'g');
+                    //text = text.replace('\n', '<br/>', 'g');
                     console.log(text);
                     if (element) {
                         element.value += text + "\n";
