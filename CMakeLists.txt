@@ -15,11 +15,12 @@ else()
 	message(STATUS "Development build")
 endif()
 
-if(BUILD_DOCS)
+if(BUILD_DOCS OR EMSCRIPTEN)
 	if(NOT X16ROM_PATH)
 		message(FATAL_ERROR "Missing path to x16-rom. (X16ROM_PATH not set)")
 	endif()
-
+endif()
+if(BUILD_DOCS)
 	if(NOT X16DOCS_PATH)
 		message(FATAL_ERROR "Missing path to x16-docs. (X16DOCS_PATH not set)")
 	endif()
@@ -58,6 +59,7 @@ set(SOURCES
 	via.c
 	video.c
 	$<$<BOOL:${WITH_YM2151}>:ym2151.c>
+	$<$<BOOL:${EMSCRIPTEN}>:javascript_interface.c>
 )
 set(HEADERS
 	cpu/fake6502.h
@@ -88,6 +90,28 @@ if(X16EMU_RELEASE OR EXISTS "${X16ROM_PATH}/rom.bin")
 		COMMAND "${CMAKE_COMMAND}" -E copy "${X16ROM_PATH}/rom.bin" "${CMAKE_CURRENT_BINARY_DIR}/rom.bin"
 		COMMENT "Copying rom.bin to build directory" VERBATIM)
 	install(FILES "${X16ROM_PATH}/rom.bin" "${X16ROM_PATH}/rom.txt" DESTINATION ".")
+endif()
+if(EMSCRIPTEN)
+	set_target_properties(x16emu PROPERTIES SUFFIX ".html")
+
+	set(WASM_TEMPLATE "${CMAKE_CURRENT_SOURCE_DIR}/webassembly/x16emu-template.html")
+	set(ROM_PATH "${X16ROM_PATH}/rom.bin")
+	# CMake 3.13 added target_link_options
+	string(CONCAT X16EMU_LINK_FLAGS
+		"--shell-file ${WASM_TEMPLATE}"
+		" --preload-file ${ROM_PATH}@rom.bin"
+		" -s DISABLE_DEPRECATED_FIND_EVENT_TARGET_BEHAVIOR=1"
+		" -s ASSERTIONS=0"
+		" -s USE_PTHREADS=1"
+		" -s EXPORTED_FUNCTIONS='[_j2c_reset, _j2c_paste, _main]'"
+		" -s EXTRA_EXPORTED_RUNTIME_METHODS='[ccall, cwrap]'")
+	set_property(TARGET x16emu APPEND_STRING PROPERTY LINK_FLAGS "${X16EMU_LINK_FLAGS}")
+	set_property(TARGET x16emu APPEND PROPERTY LINK_DEPENDS "${WASM_TEMPLATE}" "${ROM_PATH}")
+	add_custom_command(TARGET x16emu POST_BUILD
+		COMMAND "${CMAKE_COMMAND}" -E copy_directory "${CMAKE_CURRENT_SOURCE_DIR}/webassembly" "${CMAKE_CURRENT_BINARY_DIR}/webassembly"
+		COMMENT "Copying webassembly directory to build directory" VERBATIM)
+	install(FILES "${CMAKE_CURRENT_SOURCE_DIR}/webassembly/helper.js" "${CMAKE_CURRENT_SOURCE_DIR}/webassembly/styles.css"
+		DESTINATION "webassembly")
 endif()
 
 if(BUILD_DOCS)
