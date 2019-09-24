@@ -560,6 +560,14 @@ main(int argc, char **argv)
 		fclose(bas_file);
 	}
 
+	if (echo_mode) {
+	    int res = setvbuf(stdout, NULL, _IONBF, 0);
+	    if (res != 0) {
+	        printf("Cannot disable buffering\n");
+	        exit(1);
+	    }
+    }
+
 #ifdef WITH_YM2151
 	initAudio();
 #endif
