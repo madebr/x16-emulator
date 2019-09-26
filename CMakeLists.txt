@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.0)
+cmake_minimum_required(VERSION 3.1)
 project(x16emu LANGUAGES C VERSION 32)
 
 option(BUILD_DOCS "Build documentation")
