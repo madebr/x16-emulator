@@ -34,7 +34,9 @@ foreach(CC_SEARCH_DIR ${CC_SEARCH_DIRS})
 	endif()
 endforeach()
 
+
 set(CMAKE_FIND_ROOT_PATH ${CC_ROOTS})
+message("Setting CMAKE_FIND_ROOT_PATH to ${CMAKE_FIND_ROOT_PATH}")
 
 # search for programs in the build host directories
 set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)
